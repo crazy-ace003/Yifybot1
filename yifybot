@@ -1,0 +1,32 @@
+require'twitter'
+require'bitly'
+require_relative 'yify.rb'
+require'colorize'
+require'json'
+
+client = Twitter::REST::Client.new do |config|
+  config.consumer_key        = "pbN2ETfQRe6Ipl065VhHrdOZX"
+  config.consumer_secret     = "3cU3oTr8MxdAsYQZXIkG7KPn5MWVUqroXCffSOsMOVfb7ZI17T"
+  config.access_token        = "746483520445485056-b31x0eMbGG971x3kXKofTeoeW9VkHYs"
+  config.access_token_secret = "4Sdiyxa1NdYvHE7TBNzPZ8kXzKBVM8Uuzh7HbiyLmAiHb"
+end
+
+
+  client.search("#SDFGVDASGHDFFD", result_type: "recent").take(3).collect do |tweet|
+username="#{tweet.user.screen_name}"
+  puts" #{tweet.text}"
+  puts"#{tweet.user.screen_name}"
+  tweet= "#{tweet.text}"
+ 
+  movie=tweet.gsub('#SDFGVDASGHDFFD', '')
+  puts movie
+  data= Yify.Twitterdownload(movie)
+  x=0
+  
+  link = "#{data['data']['movies'][x]['torrents'][x]['url']}"
+  client.update("@#{username} #{link}",
+                in_reply_to_status_screen_name: username)
+  #username="#{tweet.user.screen_name.to_s}" 
+end
+
+#movie="#{tweet.text}"
